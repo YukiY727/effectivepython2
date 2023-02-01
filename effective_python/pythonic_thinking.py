@@ -1,36 +1,33 @@
-# 1使用するpythonのバージョンを確認する
-import subprocess
 import logging
 
-def check_python_version_by_command():
-    res = subprocess.check_output("python --version", shell=True)
-    print(res)
-    # logging.info(res)
+logger = logging.getLogger(__name__)
+# 1使用するpythonのバージョンを確認する
 
-# check_python_version_by_command()
+
 import sys
 
 
 def check_python_version_by_sys():
     assert sys.version_info >= (3, 6), "Python 3.6 or later is required"
-    print(sys.version_info)
-    print("Python version is ok")
+    logger.info(sys.version_info)
+    logger.info({"action": "check python version", "status": "ok"})
 
 
+# check_python_version_by_sys()
 # 2pep8スタイルガイドに従ってコードを書く
 # black, flake8などを使うようにする
 
 # 3bytesとstrの違いを理解する
-def sample_bytes():
+def display_byte_content():
     a = b"h\x65llo"
-    print(list(a))
-    print(a)
+    logger.info(list(a))
+    logger.info(a)
 
 
-def sample_str():
+def display_str_content():
     a = "a\u0300 propos"
-    print(list(a))
-    print(a)
+    logger.info(list(a))
+    logger.info(a)
 
 
 def to_str(bytes_or_str):
@@ -56,13 +53,13 @@ from pathlib import Path
 def read_bytes_file_by_r():
     with open(os.path.join(Path(__file__).parents[0], "data", "pythonic_thinking", "data.bin"), "r") as f:
         data = f.read()
-    print(data)
+    logger.info(data)
 
 
 def read_bytes_file_by_rb():
     with open(os.path.join(Path(__file__).parents[0], "data", "pythonic_thinking", "data.bin"), "rb") as f:
         data = f.read()
-    print(data)
+    logger.info(data)
 
 
 def read_bytes_file_by_encode_cp():
@@ -79,15 +76,15 @@ def read_bytes_file_by_encode_cp():
 def use_format_cstyle():
     a = 0b1011011
     b = 0xC5F
-    print("Binary is %d, hex is %d" % (a, b))
+    logger.info("Binary is %d, hex is %d" % (a, b))
 
 
 def problem_format_cstyle_1():
     # %演算子の両側がきちんと揃っているかチェックする必要がある。
     key = "my_var"
     value = 1.234
-    print("%-10s = %.2f" % (key, value))
-    print("%-10s = %.2f" % (value, key))
+    logger.info("%-10s = %.2f" % (key, value))
+    logger.info("%-10s = %.2f" % (value, key))
 
 
 def problem_format_cstyle_2():
@@ -98,19 +95,19 @@ def problem_format_cstyle_2():
         ("cauliflower", 15),
     ]
     for i, (item, count) in enumerate(pantry):
-        print("#%d: %-10s = %.2f" % (i, item, count))  # outputが少しわかりづらい
+        logger.info("#%d: %-10s = %.2f" % (i, item, count))  # outputが少しわかりづらい
 
     for i, (item, count) in enumerate(pantry):
-        print("#%d: %-10s = %d" % (i + 1, item.title(), round(count)))  # 読みづらくなってしまう
+        logger.info("#%d: %-10s = %d" % (i + 1, item.title(), round(count)))  # 読みづらくなってしまう
 
 
 def problem_format_cstyle_3():
     # 同じ変数を使いたい場合は、変数を複数回定義しなければならない
     template = "%s loves food. See %s cook."
     name = "Max"
-    print(template % (name, name))
+    logger.info(template % (name, name))
     name = "brad"
-    print(template % (name.title(), name.title()))
+    logger.info(template % (name.title(), name.title()))
 
 
 def dict_format():
@@ -145,41 +142,41 @@ def problem_format_cstyle_4():
         assert before == after
 
     soup = "lentil"
-    print("Today's soup is %(soup)s." % {"soup": soup})
+    logger.info("Today's soup is %(soup)s." % {"soup": soup})
 
     menu = {
         "soup": "lentil",
         "oyster": "kumamoto",
         "special": "schnitzel",
     }
-    print("Today's soup is %(soup)s, oyster is %(oyster)s oysters, and special is %(special)s." % menu)
+    logger.info("Today's soup is %(soup)s, oyster is %(oyster)s oysters, and special is %(special)s." % menu)
 
 
 def use_string_format():
     a = 1234.5678
     formatted = format(a, ",.2f")  # 数字を3桁でカンマ区切りにして、小数点以下2桁まで表示する
-    print(formatted)
+    logger.info(formatted)
 
     b = "my string"
     formatted = format(b, "^20s")  # 文字列を20文字の中央に配置する
-    print(formatted)
+    logger.info(formatted)
 
     key = "my_var"
     value = 1.234
-    print("{} = {}".format(key, value))  # 位置引数を使う
+    logger.info("{} = {}".format(key, value))  # 位置引数を使う
 
-    print("{:<10} = {:.2f}".format(key, value))
+    logger.info("{:<10} = {:.2f}".format(key, value))
 
-    print("%.2f%%" % 12.5)  # 12.50%
+    logger.info("%.2f%%" % 12.5)  # 12.50%
 
-    print("{} replaces {{}}".format(1.23))  # 1.23 replaces {}
+    logger.info("{} replaces {{}}".format(1.23))  # 1.23 replaces {}
 
     # 1つ目の問題を解決する
-    print("{1} = {0}".format(value, key))
+    logger.info("{1} = {0}".format(value, key))
 
     # 3つ目の問題を解決する
     name = "Max"
-    print("{0} loves food. See {0} cook.".format(name))
+    logger.info("{0} loves food. See {0} cook.".format(name))
 
     # 2つ目の問題は解決できない
     pantry = [
@@ -199,7 +196,7 @@ def dict_key_and_place_index():
         "oyster": "kumamoto",
         "special": "schnitzel",
     }
-    print("First course: {menu[oyster][0]!r}".format(menu=menu))  # First course: kumamoto
+    logger.info("First course: {menu[oyster][0]!r}".format(menu=menu))  # First course: kumamoto
 
     # 4つ目の問題(変数を多く定義しないといけない)が解決しない
     old_template = "Today's soup is %(soup)s, oyster is %(oyster)s oysters, and special is %(special)s."
@@ -213,9 +210,9 @@ def f_strings_1():
     key = "my_var"
     value = 1.234
     formatted = f"{key} = {value}"
-    print(formatted)
+    logger.info(formatted)
 
-    print(f"{key!r:<10} = {value:.2f}")
+    logger.info(f"{key!r:<10} = {value:.2f}")
 
     f_string = f"{key:<10} = {value:.2f}"
     c_tuple = "%-10s = %.2f" % (key, value)
@@ -238,7 +235,7 @@ def f_strings_2():
 
     places = 3
     number = 1.2345
-    print(f"Pi with {places} decimal places is {number:.{places}f}")
+    logger.info(f"Pi with {places} decimal places is {number:.{places}f}")
 
 
 # 5複雑な式の代わりにヘルパー関数を使う
@@ -248,21 +245,20 @@ from urllib.parse import parse_qs
 
 def url_query_1():
     my_values = parse_qs("red=5&blue=0&green=", keep_blank_values=True)
-    print(repr(my_values))
-
-    print("Red:     ", my_values.get("red"))
-    print("Green:   ", my_values.get("green"))
-    print("Opacity: ", my_values.get("opacity"))
+    logger.info(repr(my_values))
+    logger.info(f"Red:     {my_values.get('red')}")
+    logger.info(f"Green:   {my_values.get('green')}")
+    logger.info(f"Opacity: {my_values.get('opacity')}")
 
 
 def url_query_2():
     my_values = parse_qs("red=5&blue=0&green=", keep_blank_values=True)
-    print(repr(my_values))
+    logger.info(repr(my_values))
 
-    print("Red:     ", my_values.get("red", [""])[0] or 0)
+    logger.info(f"Red:      {my_values.get('red', [''])[0] or 0}")
     # 空文字列はFalse判定になる。
-    print("Green:   ", my_values.get("green", [""])[0] or 0)
-    print("Opacity: ", my_values.get("opacity", [""])[0] or 0)
+    logger.info(f"Green:    {my_values.get('green', [''])[0] or 0}")
+    logger.info(f"Opacity:  {my_values.get('opacity', [''])[0] or 0}")
 
     # しかし、これらは読みづらい上、整数になって返ってくることを保証していない。
 
@@ -271,7 +267,7 @@ def url_query_int_not_good():
     my_values = parse_qs("red=5&blue=0&green=", keep_blank_values=True)
     # これでは、何をしているかが分かりにくい
     red = int(my_values.get("red", [""])[0] or 0)
-    print(red)
+    logger.info(red)
 
 
 def url_query_if_else_not_good():
@@ -279,7 +275,7 @@ def url_query_if_else_not_good():
     red_str = my_values.get("red", [""])
     # red_strの中身が空文字列の場合、red_str[0]はFalseになり、bool値判定していることがわかりやすい
     red = int(red_str[0]) if red_str[0] else 0
-    print(red)
+    logger.info(red)
 
 
 def url_query_if_else_multilite():
@@ -290,7 +286,7 @@ def url_query_if_else_multilite():
         green = int(green_str[0])
     else:
         green = 0
-    print(green)
+    logger.info(green)
 
 
 def get_first_int(values: dict[str : list[str]], key: str, default=0):
@@ -311,9 +307,9 @@ def print_items():
         "nuts": 190,
     }
     items = tuple(snack_calories.items())
-    print(type(snack_calories.items()))
-    print(snack_calories.items())
-    print(items)
+    logger.info(type(snack_calories.items()))
+    logger.info(snack_calories.items())
+    logger.info(items)
 
 
 def access_tuple():
@@ -325,4 +321,59 @@ def access_tuple():
     items = tuple(snack_calories.items())
     first = items[0]
     second = items[1]
-    print(f"{first} and {second}")
+    logger.info(f"{first} and {second}")
+
+
+def not_insert_new_index():
+    # tupleはimmutableなので、新しい要素を追加できない
+    pair = ("Peanut", "Butter")
+    pair[0] = "Peanuts"
+
+
+def unpack_tuple_1():
+    item = ("Peanut", "Butter")
+    first, second = item
+    logger.info(f"{first} and {second}")
+
+
+def unpack_tuple_2():
+    # よくない書き方だが、以下のような書き方もできる
+    favorite_snacks = {
+        "salty": ("pretzels", 100),
+        "sweet": ("cookies", 180),
+        "veggie": ("carrots", 20),
+    }
+    (
+        (type1, (name1, cals1)),  # noqa
+        (type2, (name2, cals2)),  # noqa
+        (type3, (name3, cals3)),
+    ) = favorite_snacks.items()  # noqa
+
+    logger.info(f"Favorite {type1} is {name1} with {cals1} calories")
+    logger.info(f"Favorite {type2} is {name2} with {cals2} calories")
+    logger.info(f"Favorite {type3} is {name3} with {cals3} calories")
+
+
+def bubble_sort_not_unpack(a: list):
+    for _ in range(len(a)):
+        for i in range(1, len(a)):
+            if a[i] < a[i - 1]:
+                temp = a[i]
+                a[i] = a[i - 1]
+                a[i - 1] = temp
+    return a
+
+
+def bubble_sort_unpack(a: list):
+    for _ in range(len(a)):
+        for i in range(1, len(a)):
+            if a[i] < a[i - 1]:
+                a[i], a[i - 1] = a[i - 1], a[i]
+    # a[i - 1], a[i]が一時的な無名tupleになり、a[i], a[i - 1]に代入された後、そのtupleは破棄される
+    return a
+
+
+def log_snack_calories(snaks: list[tuple[str, int]]):
+    # 以下のように書くと、indexを使う必要がなくなる。pythonicな書き方
+    for rank, (name, cals) in enumerate(snaks, 1):
+        logger.info(f"#{rank}: {name} has {cals} calories")

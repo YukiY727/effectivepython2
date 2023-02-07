@@ -1,20 +1,43 @@
+# Standard Library
 import logging
 from urllib.parse import parse_qs
 
+# Third Party Library
 import pytest
 
+# First Party Library
 from effective_python.pythonic_thinking import (
     access_tuple,
     bubble_sort_not_unpack,
     bubble_sort_unpack,
     check_python_version_by_sys,
+    check_relatively_prime_1,
+    check_relatively_prime_2,
+    check_relatively_prime_not_good,
     dict_key_and_place_index,
     display_byte_content,
     display_str_content,
+    empty_list_for_else_block,
     f_strings_1,
     f_strings_2,
+    for_break_else_block,
+    for_else_block,
     get_first_int,
+    log_enumerate_content,
+    log_flavor,
+    log_flavor_with_index,
+    log_flavor_with_index_start_1,
+    log_name_not_same_len,
+    log_name_not_same_len_itertools,
+    log_names_counts_longest_name_not_good,
+    log_names_counts_longest_name_use_enumerate_not_good,
+    log_names_counts_longest_name_use_zip,
     log_snack_calories,
+    make_banana_smoothies,
+    make_drink_cider_good,
+    make_drink_cider_not_good,
+    make_drink_lemonade_good,
+    make_drink_lemonade_not_good,
     not_insert_new_index,
     print_items,
     problem_format_cstyle_1,
@@ -22,6 +45,7 @@ from effective_python.pythonic_thinking import (
     problem_format_cstyle_4,
     read_bytes_file_by_r,
     read_bytes_file_by_rb,
+    take_order,
     to_bytes,
     to_str,
     unpack_tuple_1,
@@ -33,6 +57,7 @@ from effective_python.pythonic_thinking import (
     url_query_int_not_good,
     use_format_cstyle,
     use_string_format,
+    while_false_block,
 )
 
 MODULE_NAME_PYTHONIC_THINKING = "effective_python.pythonic_thinking"
@@ -44,7 +69,7 @@ class Testindex1:
         assert (
             MODULE_NAME_PYTHONIC_THINKING,
             logging.INFO,
-            "sys.version_info(major=3, minor=11, micro=0, releaselevel='final', serial=0)",
+            "sys.version_info(major=3, minor=11, micro=1, releaselevel='final', serial=0)",
         ) in caplog.record_tuples
 
         assert (
@@ -264,3 +289,264 @@ class TestIndex6:
             logging.INFO,
             "#3: muffin has 190 calories",
         ) in caplog.record_tuples
+
+
+class Testindex7:
+    def test_log_flavor(self, caplog):
+        log_flavor()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "vanilla is delicious",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "chocolate is delicious",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "pecan is delicious",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "strawberry is delicious",
+        ) in caplog.record_tuples
+
+    def test_log_flavor_with_index(self, caplog):
+        log_flavor_with_index()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "1: vanilla",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "2: chocolate",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "3: pecan",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "4: strawberry",
+        ) in caplog.record_tuples
+
+    def test_log_enumerate_content(self, caplog):
+        log_enumerate_content()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "(0, 'vanilla')",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "(1, 'chocolate')",
+        ) in caplog.record_tuples
+
+    def test_log_flavor_with_index_start_1(self, caplog):
+        log_flavor_with_index_start_1()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "1: vanilla",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "2: chocolate",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "3: pecan",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "4: strawberry",
+        ) in caplog.record_tuples
+
+
+class Testindex8:
+    def test_log_names_counts_longest_name_not_good(self, caplog):
+        log_names_counts_longest_name_not_good()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "[7, 4, 5]",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Cecilia",
+        ) in caplog.record_tuples
+
+    def test_log_names_counts_longest_name_use_enumerate_not_good(self, caplog):
+        log_names_counts_longest_name_use_enumerate_not_good()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "[7, 4, 5]",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Cecilia",
+        ) in caplog.record_tuples
+
+    def test_log_names_counts_longest_name_use_zip(self, caplog):
+        log_names_counts_longest_name_use_zip()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Cecilia",
+        ) in caplog.record_tuples
+
+    def test_log_name_not_same_len(self, caplog):
+        log_name_not_same_len()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Cecilia",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Lise",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Marie",
+        ) in caplog.record_tuples
+
+    def test_log_name_not_same_len_itertools(self, caplog):
+        log_name_not_same_len_itertools()
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Cecilia: 7",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Lise: 4",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Marie: 5",
+        ) in caplog.record_tuples
+        assert (
+            MODULE_NAME_PYTHONIC_THINKING,
+            logging.INFO,
+            "Rosalind: None",
+        ) in caplog.record_tuples
+
+
+class TestIndex9:
+    def test_for_else_block(self, caplog):
+        for_else_block()
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Loop 0") in caplog.record_tuples
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Loop 1") in caplog.record_tuples
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Loop 2") in caplog.record_tuples
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Else block!") in caplog.record_tuples
+
+    def test_for_break_else_block(self, caplog):
+        for_break_else_block()
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Loop 0") in caplog.record_tuples
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Loop 1") in caplog.record_tuples
+        assert caplog.record_tuples.count((MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Loop 2")) == 0
+        assert caplog.record_tuples.count((MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Else block!")) == 0
+
+    def test_empty_list_for_else_block(self, caplog):
+        empty_list_for_else_block()
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "For Else block!") in caplog.record_tuples
+        assert caplog.record_tuples.count((MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Never runs")) == 0
+
+    def test_while_flase_block(self, caplog):
+        while_false_block()
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "While Else block!") in caplog.record_tuples
+        assert caplog.record_tuples.count((MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Never runs")) == 0
+
+    def test_check_relatively_prime_not_good(self, caplog):
+        check_relatively_prime_not_good()
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Testing 2") in caplog.record_tuples
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Testing 3") in caplog.record_tuples
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "Testing 4") in caplog.record_tuples
+        assert (MODULE_NAME_PYTHONIC_THINKING, logging.INFO, "relatively prime") in caplog.record_tuples
+
+    def test_check_relatively_prime_1(self):
+        assert check_relatively_prime_1(4, 9)
+        assert not check_relatively_prime_1(3, 9)
+
+    def test_check_relatively_prime_2(self):
+        assert check_relatively_prime_2(4, 9)
+        assert not check_relatively_prime_2(3, 9)
+
+
+@pytest.fixture()
+def mock_make_lemonade(mocker):
+    return mocker.patch("effective_python.pythonic_thinking.make_lemonade")
+
+
+@pytest.fixture()
+def mock_out_of_stock(mocker):
+    return mocker.patch("effective_python.pythonic_thinking.out_of_stock")
+
+
+@pytest.fixture()
+def mock_make_cider(mocker):
+    return mocker.patch("effective_python.pythonic_thinking.make_cider")
+
+
+@pytest.fixture()
+def mock_slice_bananas(mocker):
+    return mocker.patch("effective_python.pythonic_thinking.sline_bananas")
+
+
+@pytest.fixture()
+def mock_make_smoothie(mocker):
+    return mocker.patch("effective_python.pythonic_thinking.make_smoothies")
+
+
+class TestIndex10:
+    def test_make_drink_lemonade_not_good(self, mock_make_lemonade, mock_out_of_stock):
+        make_drink_lemonade_not_good()
+        mock_make_lemonade.assert_called_once()
+        mock_out_of_stock.assert_not_called()
+
+    def test_make_drink_lemonade_good(self, mock_make_lemonade, mock_out_of_stock):
+        make_drink_lemonade_good()
+        mock_make_lemonade.assert_called_once()
+        mock_out_of_stock.assert_not_called()
+
+    def test_make_drink_cider_not_good(self, mock_make_cider, mock_out_of_stock):
+        make_drink_cider_not_good()
+        mock_make_cider.assert_called_once()
+        mock_out_of_stock.assert_not_called()
+
+    def test_make_drink_cider_good(self, mock_make_cider, mock_out_of_stock):
+        make_drink_cider_good()
+        mock_make_cider.assert_called_once()
+        mock_out_of_stock.assert_not_called()
+
+    def test_make_banana_smoothies(self, mock_slice_bananas, mock_make_smoothie):
+        make_banana_smoothies()
+        mock_slice_bananas.assert_called_once()
+        mock_make_smoothie.assert_called_once()
+
+    def test_take_order(self, mock_slice_bananas, mock_make_smoothie, mock_make_cider, mock_make_lemonade):
+        take_order()
+        mock_slice_bananas.assert_called_once()
+        mock_make_smoothie.assert_called_once()
+        mock_make_cider.assert_not_called()
+        mock_make_lemonade.assert_not_called()

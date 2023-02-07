@@ -1,9 +1,11 @@
+# Standard Library
 import logging
 
 logger = logging.getLogger(__name__)
 # 1使用するpythonのバージョンを確認する
 
 
+# Standard Library
 import sys
 
 
@@ -16,6 +18,7 @@ def check_python_version_by_sys():
 # check_python_version_by_sys()
 # 2pep8スタイルガイドに従ってコードを書く
 # black, flake8などを使うようにする
+
 
 # 3bytesとstrの違いを理解する
 def display_byte_content():
@@ -46,6 +49,7 @@ def to_bytes(bytes_or_str):
     return value  # Instance of bytes
 
 
+# Standard Library
 import os
 from pathlib import Path
 
@@ -240,6 +244,7 @@ def f_strings_2():
 
 # 5複雑な式の代わりにヘルパー関数を使う
 
+# Standard Library
 from urllib.parse import parse_qs
 
 
@@ -377,3 +382,317 @@ def log_snack_calories(snaks: list[tuple[str, int]]):
     # 以下のように書くと、indexを使う必要がなくなる。pythonicな書き方
     for rank, (name, cals) in enumerate(snaks, 1):
         logger.info(f"#{rank}: {name} has {cals} calories")
+
+
+# 7rangeではなくenumerateを使う
+def hogehoge():
+    # Standard Library
+    from random import randint
+
+    # rangeは、整数集合上で、ループする処理に使う
+    random_bits = 0
+    for i in range(64):
+        if randint(0, 1):  # 0か1をランダムに返す
+            random_bits |= 1 << i  #
+            logger.info(random_bits)
+    logger.info(bin(random_bits))
+
+
+def log_flavor():
+    flavors = ["vanilla", "chocolate", "pecan", "strawberry"]
+    for flavor in flavors:
+        logger.info(f"{flavor} is delicious")
+
+
+def log_flavor_with_index():
+    flavors = ["vanilla", "chocolate", "pecan", "strawberry"]
+    for i in range(len(flavors)):
+        flavor = flavors[i]
+        logger.info(f"{i + 1}: {flavor}")
+
+
+def log_enumerate_content():
+    flavors = ["vanilla", "chocolate", "pecan", "strawberry"]
+    it = enumerate(flavors)
+    logger.info(next(it))  # nextは、イテレータの次の要素を返す
+    logger.info(next(it))
+
+
+def log_flavor_with_index_start_1():
+    flavors = ["vanilla", "chocolate", "pecan", "strawberry"]
+    for i, flavor in enumerate(flavors, 1):
+        logger.info(f"{i}: {flavor}")
+
+
+# 8 イテレータを並列に処理するにはzipを使う
+def log_names_counts_longest_name_not_good():
+    names = ["Cecilia", "Lise", "Marie"]
+    counts = [len(n) for n in names]
+    logger.info(counts)
+    longest_name = None
+    max_count = 0
+    # countsとnamesをindexで取り出しているので、読みにくに
+    for i in range(len(names)):
+        count = counts[i]
+        if count > max_count:
+            longest_name = names[i]
+            max_count = count
+    logger.info(longest_name)
+
+
+def log_names_counts_longest_name_use_enumerate_not_good():
+    names = ["Cecilia", "Lise", "Marie"]
+    counts = [len(n) for n in names]
+    logger.info(counts)
+    longest_name = None
+    max_count = 0
+    # countsがまだindexを使っているので、読みにくい
+    for i, name in enumerate(names):
+        count = counts[i]
+        if count > max_count:
+            longest_name = name
+            max_count = count
+    logger.info(longest_name)
+
+
+def log_names_counts_longest_name_use_zip():
+    names = ["Cecilia", "Lise", "Marie"]
+    counts = [len(n) for n in names]
+    longest_name = None
+    max_count = 0
+    # zipを使うと、indexを使わなくても、並列に処理できる
+    # zipは無限に長い入力でも、メモリを食わない
+    for name, count in zip(names, counts):
+        if count > max_count:
+            longest_name = name
+            max_count = count
+    logger.info(longest_name)
+
+
+def log_name_not_same_len():
+    names = ["Cecilia", "Lise", "Marie"]
+    counts = [len(n) for n in names]
+    # zip内の要素の数が異なる場合、短い方に合わせる
+    names.append("Rosalind")
+    for name, count in zip(names, counts):
+        logger.info(name)
+    # Rosalindが出力されない
+
+
+def log_name_not_same_len_itertools():
+    names = ["Cecilia", "Lise", "Marie"]
+    counts = [len(n) for n in names]
+    # zip内の要素の数が異なる場合、zip_longestを使うと、長い方に合わせる
+    names.append("Rosalind")
+    # Standard Library
+    import itertools
+
+    for name, count in itertools.zip_longest(names, counts):
+        logger.info(f"{name}: {count}")
+    # Rosalind: Noneが出力される
+
+
+# 9 forループとwihileスープの後のelseブロックは使わない
+def for_else_block():
+    for i in range(3):
+        logger.info(f"Loop {i}")
+    else:
+        logger.info("Else block!")
+    # pythonでは、forループの後のelseは、breakで抜けなかった場合に実行される
+
+
+def for_break_else_block():
+    for i in range(3):
+        logger.info(f"Loop {i}")
+        if i == 1:
+            break
+    else:
+        logger.info("Else block!")
+    # breakで抜けた場合には、elseは実行されない
+
+
+def empty_list_for_else_block():
+    names = []
+    for name in names:
+        logger.info("Never runs")
+    else:
+        logger.info("For Else block!")
+    # namesが空の場合にelseが実行される
+
+
+def while_false_block():
+    while False:
+        logger.info("Never runs")
+    else:
+        logger.info("While Else block!")
+    # whileループが頭でFalseの場合にelseが実行される
+
+
+def check_relatively_prime_not_good():
+    a = 4
+    b = 9
+    for i in range(2, min(a, b) + 1):
+        logger.info(f"Testing {i}")
+        if a % i == 0 and b % i == 0:
+            logger.info("Not relatively prime")
+            break
+    else:
+        logger.info("relatively prime")
+    # 互いに素である時は、breakが実行されないので、elseが実行される
+
+
+def check_relatively_prime_1(a, b):
+    for i in range(2, min(a, b) + 1):
+        if a % i == 0 and b % i == 0:
+            return False
+    return True
+    # 互いに素が見つかれば、roopを抜けるので、elseは不要
+
+
+def check_relatively_prime_2(a, b):
+    is_relatively_prime = True
+    for i in range(2, min(a, b) + 1):
+        if a % i == 0 and b % i == 0:
+            is_relatively_prime = False
+            break
+    return is_relatively_prime
+    # ループ後のelseを使わないように、is_relatively_primeを使う
+
+
+# 10 代入式で繰り返しを防ぐ
+def make_lemonade(count: int):
+    """Lemonadeを作る
+
+    Args:
+        count (int): Lemonの数
+    """
+    pass
+
+
+def out_of_stock():
+    """Lemonがない"""
+    pass
+
+
+def make_drink_lemonade_not_good():
+    fresh_fruit = {
+        "apple": 10,
+        "banana": 8,
+        "lemon": 5,
+    }
+    count = fresh_fruit.get("lemon", 0)
+    if count:
+        make_lemonade(count)
+    else:
+        out_of_stock()
+    # countはif文の中でしか使わないので、外で定義する必要はない
+
+
+def make_drink_lemonade_good():
+    fresh_fruit = {
+        "apple": 10,
+        "banana": 8,
+        "lemon": 5,
+    }
+    if count := fresh_fruit.get("lemon", 0):
+        make_lemonade(count)
+    else:
+        out_of_stock()
+    # walrus演算子を使うと、countをif文の中で定義できる
+
+
+def make_cider(count: int):
+    """Ciderを作る
+
+    Args:
+        count (int): Appleの数
+    """
+    pass
+
+
+def make_drink_cider_not_good():
+    fresh_fruit = {
+        "apple": 10,
+        "banana": 8,
+        "lemon": 5,
+    }
+    count = fresh_fruit.get("apple", 0)
+    if count >= 4:
+        make_cider(count)
+    else:
+        out_of_stock()
+    # countはif文の中でしか使わないので、外で定義する必要はない
+
+
+def make_drink_cider_good():
+    fresh_fruit = {
+        "apple": 10,
+        "banana": 8,
+        "lemon": 5,
+    }
+    if (count := fresh_fruit.get("apple", 0)) >= 4:
+        make_cider(count)
+    else:
+        out_of_stock()
+    # walrus演算子を使うと、countをif文の中で定義できる
+
+
+def sline_bananas(count: int):
+    pass
+
+
+def make_smoothies(count: int):
+    pass
+
+
+class OutOfBanana(Exception):
+    pass
+
+
+def make_banana_smoothies():
+    fresh_fruit = {
+        "apple": 10,
+        "banana": 8,
+        "lemon": 5,
+    }
+    if (count := fresh_fruit.get("banana", 0)) >= 2:
+        pieces = sline_bananas(count)
+
+    try:
+        smoothies = make_smoothies(pieces)
+    except OutOfBanana:
+        out_of_stock()
+
+
+def take_order():
+    fresh_fruit = {
+        "apple": 10,
+        "banana": 8,
+        "lemon": 5,
+    }
+    if (count := fresh_fruit.get("banana", 0)) >= 2:
+        pieces = sline_bananas(count)
+        to_enjoy = make_smoothies(pieces)
+    elif (count := fresh_fruit.get("apple", 0)) >= 4:
+        to_enjoy = make_cider(count)
+    elif count := fresh_fruit.get("lemon", 0):
+        to_enjoy = make_lemonade(count)
+    else:
+        to_enjoy = "nothing"
+    return to_enjoy
+
+
+def pick_fruit():
+    pass
+
+
+def make_juice(fruit: str, count: int):
+    pass
+
+
+def pack_juice():
+    bottles = []
+    while fresh_fruit := pick_fruit():
+        for fruit, count in fresh_fruit.items():
+            juice = make_juice(fruit, count)
+            bottles.extend(juice)

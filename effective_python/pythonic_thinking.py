@@ -67,6 +67,7 @@ def read_bytes_file_by_rb():
 
 
 def read_bytes_file_by_encode_cp():
+    # 明示的にエンコードを指定する
     with open(
         os.path.join(Path(__file__).parents[0], "data", "pythonic_thinking", "data.bin"), "r", encoding="cp1252"
     ) as f:

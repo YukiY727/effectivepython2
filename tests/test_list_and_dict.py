@@ -6,9 +6,14 @@ import pytest
 
 # First Party Library
 from effective_python.list_and_dict import (
+    VisitsDefaultDict,
+    VisitsSetdefault,
+    add_tokyo_and_paris,
+    add_wheat,
     all_slice_duplication_different_object,
     all_slice_duplication_same_object,
     byte_stride,
+    get_winner,
     good_generator_catch_all,
     kind_of_stride,
     log_best_car,
@@ -17,16 +22,17 @@ from effective_python.list_and_dict import (
     modify_list_slice,
     not_good_generator_catch_all,
     over_len_slice,
+    popular_ranks,
     short_catch_all_unpack,
     slice_long_len,
     slice_short_len,
     slice_start_end,
     sort_by_name,
-    sort_weight_name,
     sort_minus_weight_name,
+    sort_weight_name,
+    sort_weight_name_reverse,
     split_stride_and_slice,
     stride,
-    sort_weight_name_reverse,
     unicode_encode_stride,
     unicode_stride,
 )
@@ -340,3 +346,49 @@ class TestIndex14:
             logging.INFO,
             "sort_minus_weight_name:[Tool('level', 3.5), Tool('hammer', 1.25), Tool('chisel', 0.5), Tool('screwdriver', 0.5)]",
         ) in caplog.record_tuples
+
+
+class TestIndex15:
+    def test_popular_ranks(self, caplog):
+        votes = {
+            "otter": 1281,
+            "polar bear": 587,
+            "fox": 863,
+        }
+        assert popular_ranks(votes, {}) == {"otter": 1, "fox": 2, "polar bear": 3}
+
+    def test_get_winner(self):
+        ranks = {"otter": 1, "fox": 2, "polar bear": 3}
+        assert get_winner(ranks) == "otter"
+
+
+class TestIndex16:
+    def test_add_wheat(self):
+        assert add_wheat() == {
+            "pumpernickel": 2,
+            "sourdough": 1,
+            "wheat": 1,
+        }
+
+
+class TestIndex17:
+    def test_add_tokyo_and_paris(self):
+        visits = {
+            "Mexico": {"Tulum", "Puerto Vallarta"},
+            "Japan": {"Hakone"},
+        }
+        assert add_tokyo_and_paris(visits) == {
+            "Mexico": {"Tulum", "Puerto Vallarta"},
+            "Japan": {"Hakone", "Tokyo"},
+            "France": {"Paris"},
+        }
+
+    def test_class_visits_setdefault(self):
+        visits = VisitsSetdefault()
+        visits.add("Mexico", "Tulum")
+        assert visits.data == {"Mexico": {"Tulum"}}
+
+    def test_class_visits_defaultdict(self):
+        visits = VisitsDefaultDict()
+        visits.add("Mexico", "Tulum")
+        assert visits.data == {"Mexico": {"Tulum"}}

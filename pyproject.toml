@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "effective-python"
+name = "effective_python_2nd_edition"
 version = "0.1.0"
 description = ""
 authors = ["Yuki Yamada <yamada.yuki@enechain.co.jp>"]
 readme = "README.md"
-packages = [{include = "effective_python"}]
+packages = [{include = "effective_python_2nd_edition"}]
 
 [tool.poetry.dependencies]
 python = "^3.11.0"

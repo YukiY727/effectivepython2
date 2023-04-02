@@ -69,7 +69,7 @@ class Testindex1:
         assert (
             MODULE_NAME_PYTHONIC_THINKING,
             logging.INFO,
-            "sys.version_info(major=3, minor=11, micro=1, releaselevel='final', serial=0)",
+            "sys.version_info(major=3, minor=11, micro=2, releaselevel='final', serial=0)",
         ) in caplog.record_tuples
 
         assert (

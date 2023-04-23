@@ -263,3 +263,154 @@ def sort_minus_weight_name():
     # 重さが同じ場合、名前でソートする
     # 逆順にする場合、マイナスでも指定できる。ただし、数字以外は使えない
     logger.info(f"sort_minus_weight_name:{sorted(tools, key=lambda x: (-x.weight, x.name))}")
+
+
+# 15 dictの挿入順序に依存する場合は注意する
+
+
+def popular_ranks(votes: dict[str, int], ranks: dict) -> dict[str:int]:
+    names = list(votes.keys())
+    names.sort(key=votes.get, reverse=True)
+    for i, name in enumerate(names, start=1):
+        ranks[name] = i
+    return ranks
+
+
+def get_winner(ranks: dict[str:int]) -> str:
+    return next(iter(ranks))
+
+
+# Standard Library
+from collections.abc import MutableMapping
+
+
+class SortedDict(MutableMapping):
+    def __init__(self):
+        self.data = {}
+
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
+    def __delitem__(self, key):
+        del self.data[key]
+
+    def __iter__(self):
+        keys = list(self.data.keys())
+        keys.sort()
+        for key in keys:
+            yield key
+
+    def __len__(self):
+        return len(self.data)
+
+
+# 16 辞書の欠損キーの処理にはinやKeyErrorではなくgetを使う
+
+
+def add_wheat():
+    counters = {
+        "pumpernickel": 2,
+        "sourdough": 1,
+    }
+    count = counters.get("wheat", 0)
+    counters["wheat"] = count + 1
+    return counters
+
+
+# 17 内部状態の欠損要素を扱うにはsetdefaultではなくdefaultdictを使う
+
+
+def add_tokyo_and_paris(visits: dict[str, set[str]]) -> dict[str, set[str]]:
+    # 短い
+    visits.setdefault("France", set()).add("Paris")
+
+    # 長い
+    if (japan := visits.get("Japan")) is None:
+        visits["Japan"] = japan = set()
+    japan.add("Tokyo")
+
+    return visits
+
+
+class VisitsSetdefault:
+    def __init__(self):
+        self.data = {}
+
+    def add(self, country, city):
+        city_set = self.data.setdefault(country, set())
+        city_set.add(city)
+
+
+# Standard Library
+from collections import defaultdict
+
+
+class VisitsDefaultDict:
+    def __init__(self):
+        self.data = defaultdict(set)
+
+    def add(self, country, city):
+        self.data[country].add(city)
+
+
+# 18 __missing__でキー依存デフォルト値を作成する方法を把握しておく
+
+
+def open_picture_default():
+    picture: dict[str, str] = {}
+    path = "profile_1234.png"
+    if (handle := picture.get(path)) is None:
+        try:
+            handle = open(path, "a+b")
+        except OSError:
+            raise
+        else:
+            picture[path] = handle
+
+    handle.seek(0)
+    image_data = handle.read()
+
+
+def open_picture_setdefault():
+    picture: dict[str, str] = {}
+    path = "profile_1234.png"
+    try:
+        handle = picture.setdefault(path, open(path, "a+b"))
+        # open関数がpathが辞書にある場合でも常に呼ばれてしまう。
+        # openした時のエラーなのか、setdefaultした時のエラーなのかわからない
+    except OSError:
+        raise
+    else:
+        handle.seek(0)
+        image_data = handle.read()
+
+
+def open_picture(profile_path):
+    try:
+        return open(profile_path, "a+b")
+    except OSError:
+        raise
+
+
+def open_picture_defaultdict():
+    path = "profile_1234.png"
+    pictures = defaultdict(open_picture)# ここのopen_pictureの引数にpathを渡すことができない
+    handle = pictures[path]
+    handle.seek(0)
+    image_data = handle.read()
+    
+class Pictures(dict):
+    def __missing__(self, key):
+        value = open_picture(key)
+        self[key] = value
+        return value
+    
+def open_picture_picture_class():
+    path = "profile_1234.png"
+    picture = Pictures()
+    handle = picture[path]
+    handle.seek(0)
+    image_data = handle.read()
